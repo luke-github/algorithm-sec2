@@ -1,25 +1,13 @@
 #include <iostream>
 using namespace std;
 
-int check_parity(int x){
-	int result = 0;
-	while(x){
-		result ^= 1;
-		x &= (x-1);
+int swap_bits(int x, int i, int j){
+	if(((x>>i)&1)!=((x>>j)&1)){
+		x ^= (1<<i)|(1<<j);
 	}
-	return result;
-}
-
-int check_parity2(int x){
-	int result = 0;
-	while(x){
-		result ^= (x&1);
-		x >>=1;
-	}
-	return result;
+	return x;
 }
 
 int main(){
-	cout<<check_parity(3)<<endl;
-	cout<<check_parity2(3)<<endl;
+	cout<<swap_bits(4,2,0);
 }
