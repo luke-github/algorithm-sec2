@@ -1,15 +1,15 @@
 #include <iostream>
 using namespace std;
 
-int converter(const string& str){
+int reverse(int a){
 	int res = 0;
-	for(char x : str){
-		res = 26*res;
-		res += x - 'A' +1;
+	while(a){
+		res = res*10 + a%10;
+		a /= 10;
 	}
 	return res;
 }
 
 int main(){
-	cout<<converter("AA");
+	cout<<reverse(123);
 }
