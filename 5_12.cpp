@@ -2,7 +2,7 @@
 using namespace std;
 
 int random_generator(int a, int b){
-	int t = abs(a-b)+1;
+	int t = abs(b-a)+1;
 	int res;
 	do{
 		res = 0;
@@ -13,3 +13,4 @@ int random_generator(int a, int b){
 	return res + a;
 }
 
+// the algorithm complxity is log(n)
