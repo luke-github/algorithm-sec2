@@ -23,3 +23,5 @@ bool parlidrom_checker(int num){
 int main(){
 	cout<<parlidrom_checker(12);
 }
+
+// the complexity is n/2 n is equal to the length of the number.
