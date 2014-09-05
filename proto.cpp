@@ -2,15 +2,19 @@
 #include <vector>
 using namespace std;
 
-vector<int> adder_algorithm(vector<int> vec){
-	vec.back()++;
-	for(int i=vec.size()-1;i>0&&vec[i]==10;i--){
-		vec[i]=0;
-		vec[i-1]++;
+bool check_farest_point(vector<int>& vec){
+	int reach = 0;
+	for(int i=0;i<vec.size();i++){
+		if(i>reach){
+			return false;
+		}
+		reach = max(reach,i+vec[i]);
 	}
-	if(vec[0]==10){
-		vec[0]=0;
-		vec.insert(vec.begin(),1,1);
-	}
-	return vec;
+	return true;
+}
+
+int main(){
+	vector<int> in = {3,2,0,0,2,0,1};
+	vector<int> in2 = {3,3,1,0,2,0,1};
+	cout<<check_farest_point(in);
 }
