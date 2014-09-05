@@ -14,3 +14,11 @@ vector<int> adder_algorithm(vector<int> vec){
 	}
 	return vec;
 }
+
+int main(){
+	vector<int> in = {9,9,9};
+	auto res = adder_algorithm(in);
+	for(int x : res){
+		cout<<x<<" ";
+	}
+}
