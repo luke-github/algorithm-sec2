@@ -2,11 +2,12 @@
 #include <vector>
 using namespace std;
 
-void remove_element(vector<int>* vec, int k){
-	int index = 0;
-	for(int i=0;i<vec->size();i++){
-		if((*vec)[i]!=k){
-			(*vec)[index++]=(*vec)[i];
+int remove_duplicate(vector<int>& vec){
+	int index=0;
+	for(int i=1;i<vec.size();i++){
+		if(vec[index]!=vec[i]){
+			vec[++index]=vec[i];
 		}
 	}
+	return index+1;
 }
