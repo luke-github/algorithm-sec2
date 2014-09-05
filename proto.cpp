@@ -1,15 +1,17 @@
 #include <iostream>
-#include <complex>
+#include <vector>
 using namespace std;
 
-bool checker(int i){
-	int a = floor(sqrt(i));
-	if(a*a==i){
-		return true;
+void dutch_flag(int pivot_index, vector<int>* vec){
+	int pivot = (*vec)[pivot_index];
+	int small = 0 , mid = 0, large = vec->size()-1;
+	while(mid<=large){
+		if((*vec)[mid]<pivot){
+			swap((*vec)[small++],(*vec)[mid++]);
+		}else if((*vec)[mid]==pivot){
+			mid++;
+		}else{
+			swap((*vec)[large--],(*vec)[mid]);
+		}
 	}
-	return false;
-}
-
-int main(){
-	cout<<checker(26);
 }
