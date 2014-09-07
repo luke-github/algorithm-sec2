@@ -2,19 +2,33 @@
 #include <vector>
 using namespace std;
 
-void remove_deuplicate(vector<int>& vec){
-	int res = 0;
-	for(int i=1;i<vec.size();i++){
-		if(vec[res]!=vec[i]){
-			vec[++res]=vec[i];
+vector<int> next_permutation(vector<int> vec){
+	int k = vec.size()-2;
+	while(k>=0){
+		if(vec[k]>vec[k+1]){
+			k--;
+		}else{
+			break;
 		}
 	}
+	int l;
+	for(int i=k+1;i<vec.size();i++){
+		if(vec[i]>vec[k]){
+			l = i;
+		}else{
+			break;
+		}
+	}
+	swap(vec[k],vec[l]);
+	reverse(vec.begin()+k+1,vec.end());
+	return vec;
 }
 
+
 int main(){
-	vector<int> vec = {1,2,2,3,4,5,6,7,7,7,7,7,8,9};
-	remove_deuplicate(vec);
-	for(int x : vec){
+	vector<int> vec = {1,2,5,4,3,1,1};
+	vector<int> res = next_permutation(vec);
+	for(int x: res){
 		cout<<x<<" ";
 	}
 }
