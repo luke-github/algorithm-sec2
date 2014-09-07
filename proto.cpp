@@ -1,14 +1,16 @@
 #include <iostream>
+#include <iterator>
 #include <vector>
 #include <random>
 using namespace std;
 
-vector<int> sampling_algorithm(vector<int>& vec, int k){
+double random_generator(vector<double>& T, vector<double>& P){
+	vector<double> prefix;
+	prefix.emplace_back(0);
+	partial_sum(P.begin(),P.end(),back_inserter(prefix));
+	// writer randomer generator function
 	default_random_engine gen((random_device())());
-	for(int i=0;i<k;i++){
-		uniform_int_distribution<int> dis(i,vec.size()-1);
-		swap(vec[i],vec[dis(gen)]);
-	}
-	vec.resize(k);
-	return vec;
+	uniform_real_distribution<double> dis(0.0,1.0);
+	auto it = upper_bound(prefix.begin(),prefix.end(),dis(gen));
+	return T[distance(prefix.begin(),it)-1];
 }
