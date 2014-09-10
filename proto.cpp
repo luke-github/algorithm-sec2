@@ -1,20 +1,14 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 
-bool check_parlidorm(string s){
-	int i=0, j=s.size()-1;
-	while(i<j){
-		while((!isalnum(s[i])) && i<j){
-			i++;
-		}
-		while((!isalnum(s[j]))&& i<j){
-			j--;
-		}
-		if(s[i]!=s[j]){
-			return false;
-		}
-		i++,j--;
+string reverse_word(string s){
+	reverse(s.begin(),s.end());
+	int start = 0, end = 0;
+	while((end = s.find(" ",start))!=string::npos){
+		reverse(s.begin()+start,s.begin()+end);
+		start = end + 1;
 	}
-	return true;
+	reverse(s.begin()+start,s.end());
+	return s;
 }
-
