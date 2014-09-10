@@ -2,44 +2,30 @@
 #include <vector>
 using namespace std;
 
-int stringtoint(string s){
-	bool is_negative = false;
-	int res = 0;
-	if(s[0]=='-'){
-		is_negative = true;
+string remove_and_replace(string s){
+	int write_index = 0, counter_a = 0;
+	for(char c : s){
+		if(c!='b'){
+			s[write_index++] = c;
+		}
+		if(c=='a'){
+			counter_a++;
+		}
 	}
-	for(int i = is_negative;i<s.size();i++){
-		res = res*10;
-		res += s[i] - '0';
+	s.resize(write_index+counter_a);
+	int cur_index = write_index - 1;
+	write_index = s.size()-1;
+	while(cur_index>=0){
+		if(s[cur_index]=='a'){
+			s[write_index--]='*';
+			s[write_index--]='*';
+		}else{
+			s[write_index--]=s[cur_index];
+		}
+		cur_index--;
 	}
-	if(is_negative){
-		res = -res;
-	}
-	return res;
+	return s;
 }
-
-string inttostring(int x){
-	bool is_negative = false;
-	string res;
-	if(x<0){
-		x=-x;
-		is_negative = true;
-	}
-	while(x){
-		res.push_back(x%10+'0');
-		x /= 10;
-	}
-	if(res.empty()){
-		res.push_back('0');
-	}
-	if(is_negative){
-		res.push_back('-');
-	}
-	reverse(res.begin(),res.end());
-	return res;
-}
-
 int main(){
-	cout<<stringtoint("123")<<endl;
-	cout<<inttostring(123)<<endl;
+	cout<<remove_and_replace("bbbasdfasdf");
 }
