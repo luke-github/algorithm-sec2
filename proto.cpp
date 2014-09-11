@@ -2,13 +2,20 @@
 #include <vector>
 using namespace std;
 
-string reverse_word(string s){
-	reverse(s.begin(),s.end());
-	int start = 0, end = 0;
-	while((end = s.find(" ",start))!=string::npos){
-		reverse(s.begin()+start,s.begin()+end);
-		start = end + 1;
+vector<string> keypad = {"0","1","abc","edf","ghi","jkl","mno","pqrs","tuv","wxyz"};
+
+void print_combination_handler(string& num, int index, string* res){
+	if(index==num.size()){
+		cout<<*res<<endl;
+	}else{
+		for(char c : keypad[num[index]-'0']){
+			(*res)[index]=c;
+			print_combination_handler(num,index+1,res);
+		}
 	}
-	reverse(s.begin()+start,s.end());
-	return s;
+}
+
+void print_combination(string& num){
+	string res(num.size(),0);
+	print_combination_handler(num,0,&res);
 }
