@@ -1,28 +1,19 @@
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 using namespace std;
 
-string read_to_write_algorithm(string s){
-	string res;
-	for(int i=0;i<s.size();i++){
-		int count = 1;
-		while(i+1<s.size() && s[i]==s[i+1]){
-			i++;
-			count++;
+int roman_to_int(const string& str){
+	unordered_map<char,int> T = {{'X',1},
+								{'V',5},
+								{'X',10}};
+	int res = T[str.back()];
+	for(int i = str.size()-2;i>=0;i--){
+		if(T[str[i]]<T[str[i+1]]){
+			res -= T[str[i]];
+		}else{
+			res += T[str[i]];
 		}
-		res += to_string(count)+s[i];
 	}
 	return res;
-}
-
-string read_to_write(int n){
-	string s = "1";
-	for(int i=1;i<n;i++){
-		s = read_to_write_algorithm(s);
-	}
-	return s;
-}
-
-int main(){
-	cout<<read_to_write(4);
 }
