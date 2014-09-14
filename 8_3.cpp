@@ -24,6 +24,7 @@ shared_ptr<ListNode<int>> reverse_sub(shared_ptr<ListNode<int>> head, int s, int
 	}
 	shared_ptr<ListNode<int>> f_ptr=s_ptr, next_f_ptr = f_ptr->next, cur = s_ptr, pre=nullptr;
 	while(count<f){
+		count++;
 		f_ptr = cur->next;
 		next_f_ptr = f_ptr->next;
 		cur->next = pre;
@@ -56,4 +57,8 @@ int main(){
 	n6->next=n7;
 	n7->next=nullptr;
 	auto res = reverse_sub(n1,2,5);
+	while(res){
+		cout<<res->data<<" ";
+		res=res->next;
+	}
 }

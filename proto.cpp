@@ -8,28 +8,57 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> reverse(shared_ptr<ListNode<int>> head){
-	shared_ptr<ListNode<int>> cur = head, pre = nullptr;
-	while(cur){
-		shared_ptr<ListNode<int>> temp = cur->next;
+shared_ptr<ListNode<int>> reverse_sub(shared_ptr<ListNode<int>> head, int s, int f){
+	if(s==f){
+		return head;
+	}
+	int count = 1;
+	shared_ptr<ListNode<int>> s_ptr = head, pre_s_ptr = nullptr;
+	while(count<s){
+		count++;
+		pre_s_ptr=s_ptr;
+		s_ptr=s_ptr->next;
+	}
+	if(pre_s_ptr){
+		pre_s_ptr->next=nullptr;
+	}
+	shared_ptr<ListNode<int>> f_ptr, next_f_ptr, cur=head, pre=nullptr;
+	while(count<f){
+		count++;
+		f_ptr = cur->next;
+		next_f_ptr = f_ptr->next;
 		cur->next = pre;
 		pre = cur;
-		cur =temp;
+		cur = f_ptr;
 	}
-	return pre;
+	f_ptr->next = pre;
+	s_ptr->next = next_f_ptr;
+	if(pre_s_ptr){
+		pre_s_ptr->next = f_ptr;
+		return head;
+	}else{
+		return f_ptr;
+	}
 }
 
 int main(){
-	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>{1,nullptr});
-	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>{2,nullptr});
-	shared_ptr<ListNode<int>> n3 = make_shared<ListNode<int>>(ListNode<int>{3,nullptr});
-	shared_ptr<ListNode<int>> n4 = make_shared<ListNode<int>>(ListNode<int>{4,nullptr});
+	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>({1,nullptr}));
+	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>({2,nullptr}));
+	shared_ptr<ListNode<int>> n3 = make_shared<ListNode<int>>(ListNode<int>({3,nullptr}));
+	shared_ptr<ListNode<int>> n4 = make_shared<ListNode<int>>(ListNode<int>({4,nullptr}));
+	shared_ptr<ListNode<int>> n5 = make_shared<ListNode<int>>(ListNode<int>({5,nullptr}));
+	shared_ptr<ListNode<int>> n6 = make_shared<ListNode<int>>(ListNode<int>({6,nullptr}));
+	shared_ptr<ListNode<int>> n7 = make_shared<ListNode<int>>(ListNode<int>({7,nullptr}));
 	n1->next=n2;
 	n2->next=n3;
 	n3->next=n4;
-	auto p = reverse(n1);
-	while(p){
-		cout<<p->data<<" ";
-		p=p->next;
+	n4->next=n5;
+	n5->next=n6;
+	n6->next=n7;
+	n7->next=nullptr;
+	auto res = reverse_sub(n1,2,5);
+	while(res){
+		cout<<res->data<<" ";
+		res=res->next;
 	}
 }
