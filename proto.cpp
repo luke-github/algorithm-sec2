@@ -1,42 +1,55 @@
 #include <iostream>
-#include <sstream>
 #include <vector>
 using namespace std;
 
-string decode(const string& str){
-	int count = 0;
+string decimal_to_binary(int num){
 	string res;
-	for(char c : str){
-		if(isdigit(c)){
-			count = count*10 + c- '0';
-		}else{
-			res.append(count,c);
-			count = 0;
-		}
+	while(num){
+		res.push_back('0'+(num&1));
+		num>>=1;
+	}
+	reverse(res.begin(),res.end());
+	return res;
+}
+
+int binary_to_decimal(string str){
+	int res = 0;
+	for(int i=0;i<str.size();i++){
+		res = res*2 + str[i]-'0';
 	}
 	return res;
 }
 
-string encode(const string& str){
-	int count = 1;
-	stringstream res;
-	for(int i=1;i<str.size();i++){
-		if(str[i]==str[i-1]){
-			count++;
-		}else{
-			res << count << str[i-1];
-			count = 1;
-		}
+string encode(vector<int>& vec){
+	string res;
+	for(int x : vec){
+		string cur_res = decimal_to_binary(x);
+		cur_res.insert(0,cur_res.size()-1,'0');
+		res += cur_res;
 	}
-	res << count << str.back();
-	return res.str();
+	return res;
 }
 
+vector<int> decode(string str){
+	vector<int> res;
+	int index = 0;
+	while(index<str.size()){
+		int zero_index = index;
+		while(zero_index<str.size()&&str[zero_index]=='0'){
+			zero_index++;
+		}
+		int len = zero_index - index + 1;
+		res.emplace_back(binary_to_decimal(str.substr(zero_index,len)));
+		index = zero_index + len;
+	}
+	return res;
+}
 
 int main(){
-	string in = "aabbbccc";
+ 	vector<int> in = {12};
 	cout<<encode(in)<<endl;
-	string in2 = "1a2b3c";
-	cout<<decode(in2);
-
+	vector<int> res = decode(encode(in));
+	for(int x : res){
+		cout<<x<<endl;
+	}
 }
