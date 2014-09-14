@@ -1,30 +1,53 @@
 #include <iostream>
-#include <fstream>
+#include <memory>
 using namespace std;
 
-string tail(string filename, int line_num){
-	string res;
-	fstream file_ptr(filename);
-	file_ptr.seekg(0,ios::end);
-	int file_size = file_ptr.tellg();
-	int line_count = 0;
-	for(int i=0;i<file_size;i++){
-		file_ptr.seekg(-1-i,ios::end);
-		char c;
-		file_ptr.get(c);
-		if(c=='\n'){
-			line_count++;
-			if(line_count==line_num){
-				break;
-			}
-		}
-		res.push_back(c);
-	}
-	reverse(res.begin(),res.end());
-	return res;
+template<class T>
+struct ListNode{
+	T data;
+	shared_ptr<ListNode<T>> next;
+};
+
+void merge_sorted_lists_handler2(shared_ptr<ListNode<int>>* head, shared_ptr<ListNode<int>>* tail, shared_ptr<ListNode<int>> node){
+	*head ? (*tail)->next = node : *head = node;
+	(*tail) = node;
 }
 
+void merge_sorted_lists_handler1(shared_ptr<ListNode<int>>* head, shared_ptr<ListNode<int>>* tail, shared_ptr<ListNode<int>>* node){
+	merge_sorted_lists_handler2(head,tail,*node);
+	*node=(*node)->next;
+}
+
+shared_ptr<ListNode<int>> merge_sorted_lists(shared_ptr<ListNode<int>> left, shared_ptr<ListNode<int>> right){
+	shared_ptr<ListNode<int>> head = nullptr, tail = nullptr;
+	while(left&&right){
+		merge_sorted_lists_handler1(&head,&tail,left->data<right->data?&left:&right);
+	}
+	if(left){
+		merge_sorted_lists_handler2(&head,&tail,left);
+	}
+	if(right){
+		merge_sorted_lists_handler2(&head,&tail,right);
+	}
+	return head;
+}
+
+
 int main(){
-	string filename = "text_input";
-	cout<<tail(filename,4)<<endl;
+	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>{1,nullptr});
+	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>{2,nullptr});
+	shared_ptr<ListNode<int>> n3 = make_shared<ListNode<int>>(ListNode<int>{3,nullptr});
+	shared_ptr<ListNode<int>> n4 = make_shared<ListNode<int>>(ListNode<int>{4,nullptr});
+	shared_ptr<ListNode<int>> n5 = make_shared<ListNode<int>>(ListNode<int>{5,nullptr});
+	shared_ptr<ListNode<int>> n6 = make_shared<ListNode<int>>(ListNode<int>{6,nullptr});
+
+	n1->next = n3;
+	n3->next = n5;
+	n2->next = n4;
+	n4->next = n6;
+	auto res = merge_sorted_lists(n1,n2);
+	while(res){
+		cout<<res->data<<" ";
+		res=res->next;
+	}
 }
