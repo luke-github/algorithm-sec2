@@ -19,6 +19,41 @@ shared_ptr<ListNode<int>> reverse_list(shared_ptr<ListNode<int>> head){
 	return pre;
 }
 
+shared_ptr<ListNode<int>> reverse_k_list(shared_ptr<ListNode<int>> head, int k){
+	shared_ptr<ListNode<int>> pre = head, before_pre = nullptr, post = head, before_post = nullptr;
+	bool first_run = true;
+	while(pre){
+		int i = k;
+		while(i){
+			i--;
+			before_post = post;
+			post = post->next;
+			if(!post){
+				break;
+			}
+		}
+		if(i){
+			return head;
+		}
+		before_post->next=nullptr;
+		reverse_list(pre);
+		if(before_pre){
+			before_pre->next=before_post;
+		}
+		if(first_run){
+			head = before_post;
+			first_run=false;
+		}
+		before_pre = pre;
+		pre->next = post;
+		pre = post;
+		before_post = nullptr;
+		
+
+	}
+	return head;
+}
+
 int main(){
 	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>({1,nullptr}));
 	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>({2,nullptr}));
@@ -33,7 +68,7 @@ int main(){
 	n4->next=n5;
 	n5->next=n6;
 	n6->next=n7;
-	auto res = reverse_list(n1);
+	auto res = reverse_k_list(n1,2);
 	while(res){
 		cout<<res->data<<" ";
 		res=res->next;
