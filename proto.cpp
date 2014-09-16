@@ -8,38 +8,51 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> reverse_sub(shared_ptr<ListNode<int>> head, int s, int f){
-	if(s==f){
-		return head;
-	}
-	int count = 1;
-	shared_ptr<ListNode<int>> s_ptr = head, pre_s_ptr = nullptr;
-	while(count<s){
-		count++;
-		pre_s_ptr=s_ptr;
-		s_ptr=s_ptr->next;
-	}
-	if(pre_s_ptr){
-		pre_s_ptr->next=nullptr;
-	}
-	shared_ptr<ListNode<int>> f_ptr, next_f_ptr, cur=head, pre=nullptr;
-	while(count<f){
-		count++;
-		f_ptr = cur->next;
-		next_f_ptr = f_ptr->next;
+shared_ptr<ListNode<int>> reverse_list(shared_ptr<ListNode<int>> head){
+	shared_ptr<ListNode<int>> cur = head, pre = nullptr;
+	while(cur){
+		shared_ptr<ListNode<int>> temp = cur->next;
 		cur->next = pre;
 		pre = cur;
-		cur = f_ptr;
+		cur = temp;
 	}
-	f_ptr->next = pre;
-	s_ptr->next = next_f_ptr;
-	if(pre_s_ptr){
-		pre_s_ptr->next = f_ptr;
-		return head;
-	}else{
-		return f_ptr;
-	}
+	return pre;
 }
+
+shared_ptr<ListNode<int>> reverse_k_list(shared_ptr<ListNode<int>> head, int k){
+	shared_ptr<ListNode<int>> pre=head, before_pre=nullptr, post=head, before_post=nullptr;
+	bool first_run = true;
+	while(pre){
+		int i = k;
+		while(i){
+			i--;
+			before_post=post;
+			post=post->next;
+			if(!post){
+				break;
+			}
+		}
+		if(i){
+			return head;
+		}
+		before_post->next=nullptr;
+		reverse_list(pre);
+		if(before_pre){
+			before_pre->next=before_post;
+		}
+		if(first_run){
+			head=before_post;
+			first_run=false;
+		}
+		before_pre = pre;
+		pre->next=post;
+		pre=post;
+		before_post=nullptr;
+	}
+	return head;
+}
+
+
 
 int main(){
 	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>({1,nullptr}));
@@ -55,8 +68,7 @@ int main(){
 	n4->next=n5;
 	n5->next=n6;
 	n6->next=n7;
-	n7->next=nullptr;
-	auto res = reverse_sub(n1,2,5);
+	auto res = reverse_k_list(n1,3);
 	while(res){
 		cout<<res->data<<" ";
 		res=res->next;
