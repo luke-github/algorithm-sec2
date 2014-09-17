@@ -8,22 +8,36 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> eve_odd_merge(shared_ptr<ListNode<int>> head){
-	shared_ptr<ListNode<int>> even_index = head, odd_index = head ? head->next : nullptr, pre_even_index = nullptr, first_odd_index = odd_index;
-	while(odd_index&&even_index){
-		even_index->next = odd_index->next;
-		pre_even_index = even_index;
-		even_index = even_index->next;
-		if(even_index){
-			odd_index->next = even_index->next;
-			odd_index = odd_index->next;
+shared_ptr<ListNode<int>> reverse_list(shared_ptr<ListNode<int>> head);
+
+bool is_parlidrom(shared_ptr<ListNode<int>> head){
+	shared_ptr<ListNode<int>> fast = head, slow = head;
+	while(fast){
+		fast=fast->next;
+		if(fast){
+			fast=fast->next;
+			slow=slow->next;
 		}
 	}
-	if(even_index){
-		pre_even_index = even_index;
+	shared_ptr<ListNode<int>> reverse_node = reverse_list(slow);
+	while(reverse_node&&head){
+		if(reverse_node->data!=head->data){
+			return false;
+		}else{
+			reverse_node=reverse_node->next;
+			head=head->next;
+		}
 	}
-	if(pre_even_index){
-		pre_even_index->next=first_odd_index;
+	return true;
+}
+
+shared_ptr<ListNode<int>> reverse_list(shared_ptr<ListNode<int>> head){
+	shared_ptr<ListNode<int>> cur = head, pre = nullptr;
+	while(cur){
+		shared_ptr<ListNode<int>> temp = cur->next;
+		cur->next = pre;
+		pre = cur;
+		cur = temp;
 	}
-	return head;
+	return pre;
 }
