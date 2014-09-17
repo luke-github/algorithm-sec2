@@ -8,22 +8,22 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> rotation_lists(shared_ptr<ListNode<int>> head, int k){
-	shared_ptr<ListNode<int>> tail = head;
-	int count = 1;
-	while(tail){
-		count++;
-		tail = tail->next;
+shared_ptr<ListNode<int>> eve_odd_merge(shared_ptr<ListNode<int>> head){
+	shared_ptr<ListNode<int>> even_index = head, odd_index = head ? head->next : nullptr, pre_even_index = nullptr, first_odd_index = odd_index;
+	while(odd_index&&even_index){
+		even_index->next = odd_index->next;
+		pre_even_index = even_index;
+		even_index = even_index->next;
+		if(even_index){
+			odd_index->next = even_index->next;
+			odd_index = odd_index->next;
+		}
 	}
-	tail->next = head;
-	k = k%count;
-	int step = count - k;
-	shared_ptr<ListNode<int>> pre = nullptr, cur = head;
-	while(step){
-		step--;
-		pre = cur;
-		cur = cur->next;
+	if(even_index){
+		pre_even_index = even_index;
 	}
-	pre->next=nullptr;
-	return cur;
+	if(pre_even_index){
+		pre_even_index->next=first_odd_index;
+	}
+	return head;
 }
