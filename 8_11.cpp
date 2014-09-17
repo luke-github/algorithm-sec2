@@ -8,27 +8,24 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> remove_kth_element(shared_ptr<ListNode<int>> head, int k){
-	shared_ptr<ListNode<int>> index =  head;
-	while(k&&index){
-		k--;
-		index=index->next;
+shared_ptr<ListNode<int>> rotation_list(shared_ptr<ListNode<int>> head, int k){
+	shared_ptr<ListNode<int>> tail = head;
+	int count = 1;
+	while(tail){
+		count++;
+		tail=tail->next;
 	}
-	if(k){
-		throw invalid_argument("the length is incorrect");
-	}
+	k %= count;
+	int steps = count-k;
+	tail->next = head;
 	shared_ptr<ListNode<int>> pre = nullptr, cur = head;
-	while(index){
+	while(steps){
+		steps--;
 		pre = cur;
 		cur = cur->next;
-		index = index->next;
 	}
-	if(pre){
-		pre->next=cur->next;
-		return head;
-	}else{
-		return cur->next;
-	}
+	pre->next=nullptr;
+	return cur;
 }
 
 int main(){
@@ -45,7 +42,7 @@ int main(){
 	n4->next=n5;
 	n5->next=n6;
 	n6->next=n7;
-	auto res = remove_kth_element(n1,3);
+	auto res = rotation_list(n1,3);
 	while(res){
 		cout<<res->data<<" ";
 		res=res->next;
