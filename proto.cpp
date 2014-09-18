@@ -8,31 +8,50 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> pivot_list(shared_ptr<ListNode<int>> head, int k){
-	shared_ptr<ListNode<int>> less_head = nullptr, less_tail = nullptr,
-								equal_head = nullptr, equal_tail = nullptr,
-								large_head = nullptr, large_tail = nullptr,
-								cur = head;
+shared_ptr<ListNode<int>> sort_list(shared_ptr<ListNode<int>> L){
+	shared_ptr<ListNode<int>> head = nullptr, cur = L;
 	while(cur){
-		if(cur->data < k){
-			append_list(cur,&less_head,&less_tail);
-		}else if(cur->data == k){
-			append_list(cur,&equal_head,&equal_tail);
+		shared_ptr<ListNode<int>> next = cur->next;
+		cur->next = nullptr;
+		if(head){
+			shared_ptr<ListNode<int>> index = L, pre_index = nullptr;
+			while(index && cur->data >= index->data){
+				pre_index = index;
+				index = index->next;
+			}
+			cur->next = index;
+			if(pre_index){
+				pre_index->next = cur;
+			}else{
+				head = cur;
+			}
 		}else{
-			append_list(cur,&large_head,&large_tail);
+			head = cur;
 		}
-		cur=cur->next;
+		cur = next;
 	}
-	if(less_tail){
-		less_tail->next=nullptr;
-	}
-	// same for equal and large_tail
-	if(large_head){
-		equal_tail->next = large_head;
-	}
-	if(equal_head){
-		less_tail->next=equal_head;
-	}
-	return less_head;
-
+	return head;
 }
+
+int main(){
+	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>{2,nullptr});
+	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>{9,nullptr});
+	shared_ptr<ListNode<int>> n3 = make_shared<ListNode<int>>(ListNode<int>{3,nullptr});
+	shared_ptr<ListNode<int>> n4 = make_shared<ListNode<int>>(ListNode<int>{7,nullptr});
+	shared_ptr<ListNode<int>> n5 = make_shared<ListNode<int>>(ListNode<int>{5,nullptr});
+	shared_ptr<ListNode<int>> n6 = make_shared<ListNode<int>>(ListNode<int>{10,nullptr});
+	shared_ptr<ListNode<int>> n7 = make_shared<ListNode<int>>(ListNode<int>{6,nullptr});
+	n1->next = n2;
+	n2->next = n3;
+	n3->next = n4;
+	n4->next = n5;
+	n5->next = n6;
+	n6->next = n7;
+	auto res = sort_list(n1);
+	while(res){
+		cout<<res->data<<" ";
+		res=res->next;
+	}
+}
+
+
