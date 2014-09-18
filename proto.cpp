@@ -8,50 +8,33 @@ struct ListNode{
 	shared_ptr<ListNode<T>> next;
 };
 
-shared_ptr<ListNode<int>> sort_list(shared_ptr<ListNode<int>> L){
-	shared_ptr<ListNode<int>> head = nullptr, cur = L;
-	while(cur){
-		shared_ptr<ListNode<int>> next = cur->next;
-		cur->next = nullptr;
-		if(head){
-			shared_ptr<ListNode<int>> index = L, pre_index = nullptr;
-			while(index && cur->data >= index->data){
-				pre_index = index;
-				index = index->next;
-			}
-			cur->next = index;
-			if(pre_index){
-				pre_index->next = cur;
-			}else{
-				head = cur;
-			}
-		}else{
-			head = cur;
+bool handle_carry(shared_ptr<ListNode<int>>* node){
+	if((*node)->data<10){
+		return false;
+	}
+	(*node)->data -= 10;
+	if(!(*node)->next){
+		(*node)->next = make_shared<ListNode<int>>(ListNode<int>({0,nullptr}));
+	}
+	(*node)->next->data++;
+	return true;
+}
+
+shared_ptr<ListNode<int>> adder_algorithm(shared_ptr<ListNode<int>> l1, shared_ptr<ListNode<int>> l2){
+	shared_ptr<ListNode<int>> res = l1;
+	while(l2){
+		l1->data += l2->data;
+		handle_carry(&l1);
+		if(!l1->next){
+			l1->next = l2->next;
+			return res;
 		}
-		cur = next;
+		l1=l1->next;
+		l2=l2->next;
 	}
-	return head;
-}
-
-int main(){
-	shared_ptr<ListNode<int>> n1 = make_shared<ListNode<int>>(ListNode<int>{2,nullptr});
-	shared_ptr<ListNode<int>> n2 = make_shared<ListNode<int>>(ListNode<int>{9,nullptr});
-	shared_ptr<ListNode<int>> n3 = make_shared<ListNode<int>>(ListNode<int>{3,nullptr});
-	shared_ptr<ListNode<int>> n4 = make_shared<ListNode<int>>(ListNode<int>{7,nullptr});
-	shared_ptr<ListNode<int>> n5 = make_shared<ListNode<int>>(ListNode<int>{5,nullptr});
-	shared_ptr<ListNode<int>> n6 = make_shared<ListNode<int>>(ListNode<int>{10,nullptr});
-	shared_ptr<ListNode<int>> n7 = make_shared<ListNode<int>>(ListNode<int>{6,nullptr});
-	n1->next = n2;
-	n2->next = n3;
-	n3->next = n4;
-	n4->next = n5;
-	n5->next = n6;
-	n6->next = n7;
-	auto res = sort_list(n1);
-	while(res){
-		cout<<res->data<<" ";
-		res=res->next;
+	while(l1 && handle_carry(&l1)){
+		l1=l1->next;
 	}
+	return res;
 }
-
 
