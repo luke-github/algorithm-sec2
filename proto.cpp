@@ -1,27 +1,21 @@
 #include <iostream>
 #include <stack>
-#include <sstream>
 using namespace std;
 
-int calculator_algorithm(string str){
-	stringstream ss(str);
-	string cur;
-	stack<int> st;
-	while(getline(ss,cur,',')){
-		if(cur == "+" || cur == "-" || cur == "*" || cur == "/"){
-			int y = st.top();
-			st.pop();
-			int x = st.top();
-			st.pop();
-			switch(cur.front()){
-				case '+':
-					st.emplace(x+y);
-					break;
-				// case same code here
-			}
+bool checker_algorithm(string str){
+	stack<char> st;
+	for(int i=0;i<str.size();i++){
+		if(str[i]=='(' || str[i]=='[' || str[i]=='{'){
+			st.emplace(str[i]);
 		}else{
-			st.emplace(stoi(cur));
+			if(st.empty()){
+				return false;
+			}
+			if(str[i]=='(' && st.top()!=')'){  //there also some others
+				return false;
+			}
+			st.pop();
 		}
 	}
-	return st.top();
+	return st.empty();
 }
