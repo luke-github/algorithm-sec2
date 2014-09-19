@@ -1,29 +1,27 @@
 #include <iostream>
 #include <stack>
+#include <sstream>
 using namespace std;
 
-class My_Stack{
-public:
-	bool empty(){
-		return st_.empty();
-	}
-	int max_element(){
-		if(empty()){
-			throw invalid_argument("invalid");
+int calculator_algorithm(string str){
+	stringstream ss(str);
+	string cur;
+	stack<int> st;
+	while(getline(ss,cur,',')){
+		if(cur == "+" || cur == "-" || cur == "*" || cur == "/"){
+			int y = st.top();
+			st.pop();
+			int x = st.top();
+			st.pop();
+			switch(cur.front()){
+				case '+':
+					st.emplace(x+y);
+					break;
+				// case same code here
+			}
+		}else{
+			st.emplace(stoi(cur));
 		}
-		return st_.top().second;
 	}
-	void push(int x){
-		st_.emplace(x,max(x,st_.empty()?x:st_.top().second));
-	}
-	int pop(){
-		if(empty()){
-			throw invalid_argument("invalid");
-		}
-		int res = st_.top().first;
-		st_.pop();
-		return res;
-	}
-private:
-	stack<pair<int,int>> st_;
-};
+	return st.top();
+}
