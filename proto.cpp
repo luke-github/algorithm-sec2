@@ -15,3 +15,5 @@ vector<pair<int,int>> sunset_algorithm(istringstream* sin){
 	}
 	return res;
 }
+
+// complexity is n
