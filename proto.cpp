@@ -7,20 +7,31 @@ struct BST{
 	T data;
 	shared_ptr<BST<T>> left;
 	shared_ptr<BST<T>> right;
+	shared_ptr<BST<T>> parent;
 };
 
-shared_ptr<BST<int>> LCA(shared_ptr<BST<int>>& root, shared_ptr<BST<int>>& left, shared_ptr<BST<int>>& right){
-	if(!root){
-		return nullptr;
+int getDepth(shared_ptr<BST<int>> node){
+	int res = 0;
+	while(node){
+		node=node->parent;
+		res++;
 	}
-	if(root==left || root==right){
-		return root;
+	return res;
+}
+
+shared_ptr<BST<int>> LCA(shared_ptr<BST<int>> node1, shared_ptr<BST<int>> node2){
+	int depth1 = getDepth(node1);
+	int depth2 = getDepth(node2);
+	int diff = abs(depth1 - depth2);
+	if(depth1<depth2){
+		swap(node1,node2);
 	}
-	shared_ptr<BST<int>> left_res = LCA(root->left,left,right);
-	shared_ptr<BST<int>> right_res = LCA(root->right,left,right);
-	if(left_res&&right_res){
-		return root;
-	}else{
-		return left_res?left_res:right_res;
+	while(diff--){
+		node1=node1->parent;
 	}
+	while(node1!=node2){
+		node1=node1->parent;
+		node2=node2->parent;
+	}
+	return node1;
 }
