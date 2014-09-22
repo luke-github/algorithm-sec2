@@ -1,35 +1,26 @@
 #include <iostream>
-#include <memory>
-#include <queue>
+#include <stack>
 using namespace std;
 
-template<class T>
-struct BST{
-	T data;
-	shared_ptr<BST<T>> left;
-	shared_ptr<BST<T>> right;
+class MyQueue{
+public:
+	void enQueue(int x){
+		st1_.emplace(x);
+	}
+	int deQueue(){
+		if(st2_.empty()){
+			while(!st1_.empty()){
+				st2_.emplace(st1_.top());
+				st1_.pop();
+			}
+		}
+		if(!st2_.empty()){
+			int res = st2_.top();
+			st2_.pop();
+			return res;
+		}
+		throw invalid_argument("error");
+	}
+private:
+	stack<int> st1_, st2_;
 };
-
-void depty_output_algorithm(shared_ptr<BST<int>> head){
-	if(!head){
-		return;
-	}
-	queue<shared_ptr<BST<int>>> q;
-	q.emplace(head);
-	int count = q.size();
-	while(!q.empty()){
-		shared_ptr<BST<int>> cur = q.front();
-		cout<<cur->data<<" ";
-		if(cur->left){
-			q.emplace(cur->left);
-		}
-		if(cur->right){
-			q.emplace(cur->right);
-		}
-		q.pop();
-		if(--count==0){
-			count = q.size();
-			cout<<endl;
-		}
-	}
-}
