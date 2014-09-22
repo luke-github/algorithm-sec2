@@ -1,26 +1,26 @@
 #include <iostream>
-#include <stack>
+#include <memory>
 using namespace std;
 
-class MyQueue{
-public:
-	void enQueue(int x){
-		st1_.emplace(x);
-	}
-	int deQueue(){
-		if(st2_.empty()){
-			while(!st1_.empty()){
-				st2_.emplace(st1_.top());
-				st1_.pop();
-			}
-		}
-		if(!st2_.empty()){
-			int res = st2_.top();
-			st2_.pop();
-			return res;
-		}
-		throw invalid_argument("error");
-	}
-private:
-	stack<int> st1_, st2_;
+template<class T>
+struct BST{
+	T data;
+	shared_ptr<BST<T>> left;
+	shared_ptr<BST<T>> right;
 };
+
+shared_ptr<BST<int>> LCA(shared_ptr<BST<int>>& root, shared_ptr<BST<int>>& left, shared_ptr<BST<int>>& right){
+	if(!root){
+		return nullptr;
+	}
+	if(root==left || root==right){
+		return root;
+	}
+	shared_ptr<BST<int>> left_res = LCA(root->left,left,right);
+	shared_ptr<BST<int>> right_res = LCA(root->right,left,right);
+	if(left_res&&right_res){
+		return root;
+	}else{
+		return left_res?left_res:right_res;
+	}
+}
