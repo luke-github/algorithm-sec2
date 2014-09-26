@@ -1,34 +1,20 @@
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 using namespace std;
 
-int compare(double a, double b){
-	double diff = (a-b)/b;
-	return diff < -numeric_limits<double>::epsilon() ? -1 : diff > numeric_limits<double>::epsilon();
-}
-
-double real_sqrt(double x){
-	double l,r;
-	if(compare(x,1.0)<0){
-		l = x; r = 1.0;
-	}else{
-		l=1.0; r = x;
+void check_anagram(vector<string> dict){
+	unordered_map<string,vector<string>> hash;
+	for(string str: dict){
+		string sort_str(str);
+		sort(sort_str.begin(),sort_str.end());
+		hash[sort_str].emplace_back(str);
 	}
-	while(compare(l,r)<0){
-		double m = (l+r)*0.5;
-		double val = m*m;
-		if(compare(val,x)==0){
-			return m;
-		}else if(compare(val,x)==1){
-			r = m;
-
-		}else{
-			l = m;
+	for(pair<string,vector<string>> x: hash){
+		if(x.second.size()>=2){
+			for(string s : x.second){
+				cout<<s<<endl;
+			}
 		}
 	}
-	return l;
-}
-
-int main(){
-	cout<<real_sqrt(0.9);
 }
