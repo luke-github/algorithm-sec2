@@ -1,29 +1,26 @@
 #include <iostream>
-#include <queue>
 #include <vector>
 using namespace std;
 
-struct compare{
-	bool operator()(const pair<int,int> l, const pair<int,int> r){
-		return l.second < r.second;
-	}
-};
-
-vector<int> k_large_element(vector<int> A, int k){
-	vector<int> res;
-	priority_queue<pair<int,int>,vector<pair<int,int>>,compare> max_queue;
-	max_queue.emplace(0,A[0]);
-	for(int i=0;i<k;i++){
-		pair<int,int> cur = max_queue.top();
-		int index = cur.first;
-		res.emplace_back(cur.second);
-		max_queue.pop();
-		if(index*2+1<A.size()){
-			max_queue.emplace(index*2+1,A[index*2+1]);
-		}
-		if(index*2+2<A.size()){
-			max_queue.emplace(index*2+2,A[index*2+2]);
+int first_occurance(vector<int> vec, int k){
+	int res = -1;
+	int l=0,r=vec.size()-1;
+	while(l<=r){
+		int m = (l+r)>>1;
+		if(vec[m]<k){
+			l = m+1;
+		}else if(vec[m]==k){
+			res = m;
+			r = m-1;
+		}else{
+			r=m-1;
 		}
 	}
 	return res;
+}
+
+
+int main(){
+	vector<int> in = {1,3,4,5,5,6,7,8};
+	cout<<first_occurance(in,5);
 }
