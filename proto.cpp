@@ -1,31 +1,29 @@
 #include <iostream>
 #include <queue>
-#include <sstream>
+#include <vector>
 using namespace std;
 
-void online_median(istringstream* sin){
-	priority_queue<int,vector<int>,greater<int>> H;
-	priority_queue<int,vector<int>,less<int>> L;
-	int x;
-	while(*sin>>x){
-		if(x>H.top()){
-			H.emplace(x);
-		}else{
-			L.emplace(x);
-		}
+struct compare{
+	bool operator()(const pair<int,int> l, const pair<int,int> r){
+		return l.second < r.second;
+	}
+};
 
-		if(H.size()>L.size()+1){
-			L.emplace(H.top());
-			H.pop();
-		}else if(L.size()>H.size()+1){
-			H.emplace(L.top());
-			L.pop();
+vector<int> k_large_element(vector<int> A, int k){
+	vector<int> res;
+	priority_queue<pair<int,int>,vector<pair<int,int>>,compare> max_queue;
+	max_queue.emplace(0,A[0]);
+	for(int i=0;i<k;i++){
+		pair<int,int> cur = max_queue.top();
+		int index = cur.first;
+		res.emplace_back(cur.second);
+		max_queue.pop();
+		if(index*2+1<A.size()){
+			max_queue.emplace(index*2+1,A[index*2+1]);
 		}
-
-		if(H.size()==L.size()){
-			cout<<0.5*(H.top()+L.top());
-		}else{
-			cout<< (H.size()>L.size()?H.top():L.top());
+		if(index*2+2<A.size()){
+			max_queue.emplace(index*2+2,A[index*2+2]);
 		}
 	}
+	return res;
 }
