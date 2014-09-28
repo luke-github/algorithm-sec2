@@ -1,21 +1,17 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
+#include <unordered_set>
 using namespace std;
 
-int nearest_algorithm(vector<string> vec){
-	unordered_map<string,int> hash;
-	int res = (1<<31) - 1;
-	for(int i=0;i<vec.size();i++){
-		auto it = hash.find(vec[i]);
-		if(it!=hash.end()){
-			res = min(res,i - hash[vec[i]]);
-		}
-		hash[vec[i]] = i;
-	}
-	return res;
-}
+class myClass{
+public:
+	myClass(){
 
-int main(){
-	cout<<((1<<31) - 1);
-}
+	}
+	void setvalue (int m){
+		x_=m;
+	}
+
+private:
+	int x_,y_;
+};
