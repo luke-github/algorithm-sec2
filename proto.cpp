@@ -1,26 +1,36 @@
-#include <array>
 #include <iostream>
-#include <stack>
+#include <vector>
 using namespace std;
 
-void hanoi_handler(int n, array<stack<int>,3> &poles, int from, int to, int use){
-	if(n>0){
-		hanoi_handler(n-1,poles,from,use,to);
-		poles[to].push(poles[from].top());
-		poles[from].pop();
-		cout<<"move from "<<from<<" to "<<to<<endl;
-		hanoi_handler(n-1,poles,use,to,from);
+void permutation_handler(int index, vector<char>& in, vector<vector<char>>& res){
+	if(index==in.size()){
+		res.emplace_back(in);
+		return;
+	}
+	for(int j=index;j<in.size();j++){
+		swap(in[index],in[j]);
+		permutation_handler(index+1,in,res);
+		swap(in[index],in[j]);
+
 	}
 }
 
-void hanoi(int n){
-	array<stack<int>,3> poles;
-	for(int i=n;i>0;i--){
-		poles[0].push(i);
+void permutation(vector<char> in){
+	vector<vector<char>> res;
+	permutation_handler(0,in,res);
+	for(auto x : res){
+		for(char y : x){
+			cout<<y;
+		}
+		cout<<endl;
 	}
-	hanoi_handler(n,poles,0,1,2);
 }
 
 int main(){
-	hanoi(3);
+	string str = "abc";
+	vector<char> input;
+	for(char c : str){
+		input.emplace_back(c);
+	}
+	permutation(input);
 }
