@@ -6,39 +6,32 @@ using namespace std;
 
 class ClientCredit{
 public:
-	bool insert(string name, int num){
-		if(clientHash_.emplace(name, num - offset_).second){
+	void insert(string name, int num){
+		if(clientHash_.emplace(name,num - offset_).second){
 			reverseHash_[num - offset_].emplace(name);
-			return true;
-		}else{
-			return false;
 		}
 	}
-	bool remove(string name){
+	void remove(string name){
 		auto it = clientHash_.find(name);
-		if(it!=clientHash_.end()){
+		if(it!=clientHash_.cend()){
 			reverseHash_[it->second].erase(name);
-			clientHash_.erase(name);
-			return true;
-		}else{
-			return false;
+			clientHash_.erase(it);
 		}
 	}
 	int lookup(string name){
 		auto it = clientHash_.find(name);
-		if(it != clientHash_.end()){
+		if(it!=clientHash_.cend()){
 			return it->second + offset_;
-		}
-		else{
+		}else{
 			return -1;
 		}
 	}
 	string max(){
 		auto it = reverseHash_.rbegin();
-		if(it==reverseHash_.rend()){
-			return "";
+		if(it == reverseHash_.rend()){
+			return *it->second.cbegin();
 		}else{
-			return *it->second.begin();
+			return "";
 		}
 	}
 private:
