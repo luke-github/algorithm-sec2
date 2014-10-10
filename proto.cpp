@@ -1,48 +1,29 @@
 #include <iostream>
-#include <map>
-#include <unordered_map>
-#include <unordered_set>
+#include <vector>
 using namespace std;
 
-class ClientCredit{
-public:
-	bool insert(string name, int num){
-		if(clientHash_.emplace(name, num - offset_).second){
-			reverseHash_[num - offset_].emplace(name);
-			return true;
-		}else{
-			return false;
+int min_steps(string s1, string s2){
+	int len1 = s1.size();
+	int len2 = s2.size();
+	vector<vector<int>> dp(len1+1,vector<int>(len2+1,0));
+	for(int i=0;i<=len1;i++){
+		dp[i][0]=i;
+	}
+	for(int j=0;j<=len2;j++){
+		dp[0][j]=j;
+	}
+	for(int i=1;i<=len1;i++){
+		for(int j=1;j<=len2;j++){
+			if(s1[i-1]==s2[j-1]){
+				dp[i][j] = dp[i-1][j-1];
+			}else{
+				dp[i][j] = 1 + min(dp[i-1][j-1],min(dp[i][j-1],dp[i-1][j]));
+			}
 		}
 	}
-	bool remove(string name){
-		auto it = clientHash_.find(name);
-		if(it!=clientHash_.end()){
-			reverseHash_[it->second].erase(name);
-			clientHash_.erase(name);
-			return true;
-		}else{
-			return false;
-		}
-	}
-	int lookup(string name){
-		auto it = clientHash_.find(name);
-		if(it != clientHash_.end()){
-			return it->second + offset_;
-		}
-		else{
-			return -1;
-		}
-	}
-	string max(){
-		auto it = reverseHash_.rbegin();
-		if(it==reverseHash_.rend()){
-			return "";
-		}else{
-			return *it->second.begin();
-		}
-	}
-private:
-	int offset_ = 0;
-	unordered_map<string,int> clientHash_;
-	map<int,unordered_set<string>> reverseHash_;
-};
+	return dp[len1][len2];
+}
+
+int main(){
+	cout<<min_steps("abc","aec");
+}
