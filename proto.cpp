@@ -1,27 +1,21 @@
 #include <iostream>
 #include <vector>
+#include <numeric>
 using namespace std;
 
-struct Item{
-	int weight;
-	int value;
-};
-
-int knapsack(vector<Item>& vec, int W){
-	vector<int> res(W+1,0);
+int n_sum(vector<int>& vec, int k){
+	int sum = accumulate(vec.begin(),vec.end(),0);
+	vector<vector<int>> dp(vec.size()+1,vector<int>(sum+1,0));
+	dp[0][0]=1;
 	for(int i=0;i<vec.size();i++){
-		for(int j=W;j>=vec[i].weight;j--){
-			res[j] = max(res[j],res[j - vec[i].weight]+vec[i].value);
+		for(int j=0;j<=sum;j++){
+			dp[i+1][j] = dp[i][j] +  (vec[i]>j?0:dp[i][j-vec[i]]);
 		}
 	}
-	return res[W];
+	return dp[vec.size()][k];
 }
 
 int main(){
-	vector<Item> in = {
-			{4,3},
-						{2,4},
-						{1,6},
-						{5,7}};
-	cout<<knapsack(in,6);
+	vector<int> in = {1,2,2,3,4};
+	cout<<n_sum(in,4);
 }
