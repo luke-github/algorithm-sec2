@@ -2,13 +2,11 @@
 #include <vector>
 using namespace std;
 
-int num_ways(int n, int k){
-	vector<int> dp(n+1,0);
-	dp[0]=dp[1]=1;
-	for(int i=2;i<=n;i++){
-		for(int j=1;j<=i&&j<=k;j++){
-			dp[i] += dp[i-j];
-		}
+int min_waiting_time(vector<int>& vec){
+	int res = 0;
+	sort(vec.begin(),vec.end());
+	for(int i=0;i<vec.size();i++){
+		res += vec[i]*(vec.size()-(i+1));
 	}
-	return dp[n];
+	return res;
 }
