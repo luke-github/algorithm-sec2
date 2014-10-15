@@ -12,3 +12,7 @@ int num_ways(int n, int k){
 	}
 	return dp[n];
 }
+
+int main(){
+	cout<<num_ways(4,2);
+}
