@@ -2,7 +2,7 @@
 #include <unordered_set>
 using namespace std;
 
-bool test_algo(int n){
+bool check_collatz(int n){
 	unordered_set<int> table;
 	for(int i=2;i<=n;i++){
 		unordered_set<int> sequence;
@@ -16,9 +16,10 @@ bool test_algo(int n){
 				if(testval==1){
 					break;
 				}
-				testval =testval*3 +1;
+				
+				testval = testval*3+1;
 			}else{
-				testval = testval >>1;
+				testval =testval>>1;
 			}
 		}
 		table.erase(i);
@@ -27,5 +28,5 @@ bool test_algo(int n){
 }
 
 int main(){
-	cout<<test_algo(123);
+	cout<<check_collatz(123123);
 }
